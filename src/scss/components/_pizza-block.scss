@@ -43,7 +43,8 @@
         font-size: 14px;
         @include noselect();
         &.active {
-          background: #ffffff;
+          background: #fe5f1e;
+          color: #f3f3f3;
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
           border-radius: 5px;
           cursor: auto;

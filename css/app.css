@@ -417,7 +417,8 @@ a {
 }
 
 .pizza-block__selector ul li.active {
-  background: #ffffff;
+  background: #fe5f1e;
+  color: #f3f3f3;
   -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
   border-radius: 5px;
