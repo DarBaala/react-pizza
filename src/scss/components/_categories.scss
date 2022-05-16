@@ -1,9 +1,12 @@
 @import "../variables";
 
 .categories {
+  margin-bottom: 30px;
   ul {
     display: flex;
-
+    @media (max-width: 1000px) {
+      flex-wrap: wrap;
+    }
     li {
       background-color: #f9f9f9;
       padding: 13px 30px;
@@ -13,7 +16,6 @@
       cursor: pointer;
       transition: background-color 0.1s ease-in-out;
       @include noselect();
-
       &:hover {
         background-color: darken(#f9f9f9, 2%);
       }
