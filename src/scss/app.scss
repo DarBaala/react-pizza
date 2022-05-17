@@ -15,7 +15,7 @@ body {
   border-radius: 10px;
   max-width: 1400px;
   @media (max-width: 470px) {
-    width: calc(100vw - 40px);
+    width: calc(100vw - 30px);
     margin: 20px auto;
   }
 }
@@ -121,6 +121,9 @@ body {
         color: darken($color: #b6b6b6, $amount: 50);
       }
     }
+  }
+  .content__items {
+    display: block;
   }
 
   &__item {
@@ -247,6 +250,7 @@ body {
     &-buttons {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-top: 40px;
 
       .go-back-btn {
