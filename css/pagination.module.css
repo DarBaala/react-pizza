@@ -1,0 +1,36 @@
+.root li {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.root li:global.selected a {
+  background-color: #fe5f1e;
+  color: #fff;
+}
+
+.root a {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-right: 10px;
+  width: 45px;
+  height: 45px;
+  border: 2px solid #fe5d1e;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #fe5d1e;
+  font-weight: 500;
+}
+
+.root a:hover {
+  background-color: #fe5f1e;
+  color: #fff;
+}
+/*# sourceMappingURL=Pagination.module.css.map */

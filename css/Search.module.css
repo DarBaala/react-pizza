@@ -1,0 +1,46 @@
+.root {
+  position: relative;
+  margin-right: 20px;
+}
+
+.root input {
+  border: 2px solid #28282865;
+  padding: 8px 40px 8px;
+  width: 300px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  -webkit-transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+}
+
+.root input:focus {
+  border: 2px solid #fe5d1e;
+  width: 310px;
+}
+
+@media (max-width: 640px) {
+  .root input {
+    margin-bottom: 20px;
+  }
+}
+
+.root .icon {
+  opacity: 0.5;
+  position: absolute;
+  left: 8px;
+  top: 10px;
+}
+
+.root .close {
+  opacity: 0.5;
+  position: absolute;
+  right: 8px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.root .close:hover {
+  opacity: 0.8;
+}
+/*# sourceMappingURL=Search.module.css.map */

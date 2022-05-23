@@ -30,7 +30,7 @@ body {
   &__items {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
     grid-column-gap: 11px;
     grid-row-gap: 20px;
     @media (max-width: 1400px) {
@@ -295,7 +295,7 @@ body {
   }
 
   &--empty {
-    margin: 0 auto;
+    margin: 80px auto;
     width: 560px;
     text-align: center;
 
