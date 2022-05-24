@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 const FullPizza = () => {
   const [pizza, setPizza] = useState();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchPizza() {
@@ -16,6 +17,8 @@ const FullPizza = () => {
         console.log(data);
       } catch (error) {
         console.error("не получена пицца в fullapizza.jsx");
+        alert("Пицца не найдена:(");
+        navigate("/");
       }
     }
     fetchPizza();
@@ -29,7 +32,7 @@ const FullPizza = () => {
     <div className="container">
       <img width={260} height={260} src={pizza.image} />
       <h2>{pizza.title}</h2>
-      <p>Наша {pizza.title} пицца самая вкусная пицца в мире!</p>
+      <p>Наша {pizza.title} самая вкусная пицца в мире!</p>
       <h4>{pizza.price} руб.</h4>
       <Link to="/">
         <div className="button pay-btn">
