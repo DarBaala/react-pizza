@@ -16,18 +16,17 @@ import {
   setPageCoint,
   setFiltres,
 } from "../redux/slices/filterSlice";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 function Home() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const dispatch = useDispatch();
   const { categoryId, sort, pageCoint, searchValue } = useSelector(
     (state) => state.filter
   );
+  const { items, status } = useSelector((state) => state.pizza);
 
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const isMounted = useRef(false);
 
   const onChangeCategory = (id) => {
@@ -36,6 +35,15 @@ function Home() {
 
   const onChangePage = (number) => {
     dispatch(setPageCoint(number));
+  };
+
+  const getPizzas = async () => {
+    const category = categoryId > 0 ? `category=${categoryId}` : "";
+    const sortBy = sort.sortProperty.replace("-", "");
+    const order = sort.sortProperty.includes("-") ? "asc" : "desc";
+    const search = searchValue ? `&search=${searchValue}` : "";
+
+    dispatch(fetchPizzas({ category, sortBy, order, search, pageCoint }));
   };
 
   const pizzas = items
@@ -49,24 +57,6 @@ function Home() {
   const skeletons = [...new Array(4)].map((_, index) => (
     <Skeleton key={index} />
   ));
-
-  const fetchPizzas = async () => {
-    const category = categoryId > 0 ? `category=${categoryId}` : "";
-    const sortBy = sort.sortProperty.replace("-", "");
-    const order = sort.sortProperty.includes("-") ? "asc" : "desc";
-    const search = searchValue ? `&search=${searchValue}` : "";
-    setIsLoading(true);
-
-    try {
-      const res = await axios.get(
-        `https://62824b53ed9edf7bd8821d30.mockapi.io/items?page=${pageCoint}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
-      );
-      setItems(res.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Не получены items c бэкенда");
-    }
-  };
 
   useEffect(() => {
     if (isMounted.current) {
@@ -82,7 +72,7 @@ function Home() {
 
   useEffect(() => {
     if (isMounted.current) {
-      fetchPizzas();
+      getPizzas();
     }
   }, [categoryId, sort, searchValue, pageCoint]);
 
@@ -101,9 +91,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (!window.location.search) {
-      fetchPizzas();
-    }
+    getPizzas();
   }, []);
 
   return (
@@ -115,7 +103,20 @@ function Home() {
       <h2 className="content__title">
         {searchValue ? "Поиск пицц:" : "Все пиццы"}
       </h2>
-      <div className="content__items">{isLoading ? skeletons : pizzas}</div>
+      {status === "error" ? (
+        <div className="content__error-info">
+          <h2>
+            Произошла ошибка <icon>😕</icon>
+          </h2>
+          <p>
+            К сожалению, пиццы отпраивлись на войну и мы не смогли их заполучиь
+          </p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status === "loading" ? skeletons : pizzas}
+        </div>
+      )}
       <Pagination value={pageCoint} onChangePage={onChangePage} />
     </div>
   );
