@@ -1,7 +1,6 @@
-import { React, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { React, useEffect, useRef } from "react";
 import qs from "qs";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
@@ -15,17 +14,17 @@ import {
   setCategoryId,
   setPageCoint,
   setFiltres,
+  selectFilter,
 } from "../redux/slices/filterSlice";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
 function Home() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { categoryId, sort, pageCoint, searchValue } = useSelector(
-    (state) => state.filter
-  );
-  const { items, status } = useSelector((state) => state.pizza);
+  const { categoryId, sort, pageCoint, searchValue } =
+    useSelector(selectFilter);
+  const { items, status } = useSelector(selectPizzaData);
 
   const isMounted = useRef(false);
 
@@ -109,7 +108,7 @@ function Home() {
             Произошла ошибка <icon>😕</icon>
           </h2>
           <p>
-            К сожалению, пиццы отпраивлись на войну и мы не смогли их заполучиь
+            К сожалению, пиццы отпраивлись на войну и мы не смогли их заполучить
           </p>
         </div>
       ) : (
