@@ -1,6 +1,11 @@
 import React from "react";
 
-function Categories({ value, onChageCategory }) {
+type CategoriesProps = {
+  value: number;
+  onChageCategory: any;
+};
+
+const Categories: React.FC<CategoriesProps> = ({ value, onChageCategory }) => {
   const categories = [
     "Все",
     "Мясные",
@@ -28,5 +33,5 @@ function Categories({ value, onChageCategory }) {
       </ul>
     </div>
   );
-}
+};
 export default Categories;
