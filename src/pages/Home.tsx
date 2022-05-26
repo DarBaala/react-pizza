@@ -1,4 +1,4 @@
-import { React, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ import {
 } from "../redux/slices/filterSlice";
 import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
-function Home() {
+const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -28,11 +28,11 @@ function Home() {
 
   const isMounted = useRef(false);
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number) => {
     dispatch(setCategoryId(id));
   };
 
-  const onChangePage = (number) => {
+  const onChangePage = (number: number) => {
     dispatch(setPageCoint(number));
   };
 
@@ -42,17 +42,20 @@ function Home() {
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    dispatch(fetchPizzas({ category, sortBy, order, search, pageCoint }));
+    dispatch(
+      //@ts-ignore
+      fetchPizzas({ category, sortBy, order, search, pageCoint })
+    );
   };
 
   const pizzas = items
-    .filter((obj) => {
+    .filter((obj: any) => {
       if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
       }
       return false;
     })
-    .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+    .map((obj: any) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(4)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -104,9 +107,7 @@ function Home() {
       </h2>
       {status === "error" ? (
         <div className="content__error-info">
-          <h2>
-            Произошла ошибка <icon>😕</icon>
-          </h2>
+          <h2>Произошла ошибка 😕</h2>
           <p>
             К сожалению, пиццы отпраивлись на войну и мы не смогли их заполучить
           </p>
@@ -119,5 +120,5 @@ function Home() {
       <Pagination value={pageCoint} onChangePage={onChangePage} />
     </div>
   );
-}
+};
 export default Home;
