@@ -3,37 +3,42 @@ import qs from "qs";
 import { useNavigate } from "react-router-dom";
 
 import Categories from "../components/Categories";
-import Sort from "../components/Sort";
+import SortPopup from "../components/SortPopup";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
-import { sortList } from "../components/Sort";
+import { sortList } from "../components/SortPopup";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setCategoryId,
   setPageCoint,
   setFiltres,
   selectFilter,
 } from "../redux/slices/filterSlice";
-import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
+import {
+  fetchPizzas,
+  SearchPizzaParams,
+  selectPizzaData,
+} from "../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { categoryId, sort, pageCoint, searchValue } =
     useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
 
   const isMounted = useRef(false);
 
-  const onChangeCategory = (id: number) => {
-    dispatch(setCategoryId(id));
+  const onChangeCategory = (idx: number) => {
+    dispatch(setCategoryId(idx));
   };
 
-  const onChangePage = (number: number) => {
-    dispatch(setPageCoint(number));
+  const onChangePage = (page: number) => {
+    dispatch(setPageCoint(page));
   };
 
   const getPizzas = async () => {
@@ -43,8 +48,13 @@ const Home: React.FC = () => {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     dispatch(
-      //@ts-ignore
-      fetchPizzas({ category, sortBy, order, search, pageCoint })
+      fetchPizzas({
+        category,
+        sortBy,
+        order,
+        search,
+        pageCoint: String(pageCoint),
+      })
     );
   };
 
@@ -60,47 +70,54 @@ const Home: React.FC = () => {
     <Skeleton key={index} />
   ));
 
-  useEffect(() => {
-    if (isMounted.current) {
-      const params = {
-        categoryId: categoryId > 0 ? categoryId : null,
-        sortProperty: sort.sortProperty,
-        pageCoint,
-      };
-      const queryString = qs.stringify(params, { skipNulls: true });
-      navigate(`/?${queryString}`);
-    }
-  }, [categoryId, sort, searchValue, pageCoint]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     const params = {
+  //       categoryId: categoryId > 0 ? categoryId : null,
+  //       sortProperty: sort.sortProperty,
+  //       pageCoint,
+  //     };
+  //     const queryString = qs.stringify(params, { skipNulls: true });
+  //     navigate(`/?${queryString}`);
+  //   }
+  //   if (!window.location.search) {
+  //     dispatch(fetchPizzas({} as SearchPizzaParams));
+  //   }
+  // }, [categoryId, sort, searchValue, pageCoint]);
 
-  useEffect(() => {
-    if (isMounted.current) {
-      getPizzas();
-    }
-  }, [categoryId, sort, searchValue, pageCoint]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     getPizzas();
+  //   }
+  // }, [categoryId, sort, searchValue, pageCoint]);
 
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sort = sortList.find(
-        (obj) => obj.sortProperty === params.sortProperty
-      );
-      if (sort) {
-        params.sort = sort;
-      }
-      dispatch(setFiltres(params));
-    }
-    isMounted.current = true;
-  }, []);
+  // useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(
+  //       window.location.search.substring(1)
+  //     ) as unknown as SearchPizzaParams;
+  //     const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
+  //     dispatch(
+  //       setFiltres({
+  //         categoryId: Number(params.category),
+  //         pageCoint: Number(params.pageCoint),
+  //         sort: sort || sortList[0],
+  //         searchValue: params.search,
+  //       })
+  //     );
+  //   }
+  //   isMounted.current = true;
+  // }, []);
 
   useEffect(() => {
     getPizzas();
-  }, []);
+  }, [categoryId, sort.sortProperty, searchValue, pageCoint]);
 
   return (
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onChageCategory={onChangeCategory} />
-        <Sort />
+        <SortPopup />
       </div>
       <h2 className="content__title">
         {searchValue ? "Поиск пицц:" : "Все пиццы"}
